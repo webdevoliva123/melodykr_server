@@ -1,7 +1,8 @@
 const ADMINS = require("../models/admins_modal/Admins");
+const CONTENT_WRITER = require("../models/content_writer_model/Content_Writers");
 const { verifyJWTToken } = require("../utils/tokens");
 
-const adminLoginAuthentication = async (req, res, next) => {
+exports.adminLoginAuthentication = async (req, res, next) => {
   try {
     const header = req?.headers?.authorization;
 
@@ -34,7 +35,7 @@ const adminLoginAuthentication = async (req, res, next) => {
     const { id, name, role } = findAdmin;
 
     req.admin = {
-      id,
+      id:_id,
       name,
       role,
     };
@@ -49,7 +50,7 @@ const adminLoginAuthentication = async (req, res, next) => {
   }
 };
 
-const adminRoleAuthentication = (roles) => {
+exports.adminRoleAuthentication = (roles) => {
   return (req, res, next) => {
     if (!req?.admin) {
       return res.status(401).json({
@@ -71,4 +72,50 @@ const adminRoleAuthentication = (roles) => {
   };
 };
 
-module.exports = { adminLoginAuthentication, adminRoleAuthentication };
+exports.contentWriterLoginAuthentication = async (req,res,next) => {
+    try {
+        const header = req?.headers?.authorization;
+    
+        if (!header) {
+          return res.status(401).json({
+            success: false,
+            error: "You have no access to this page. no token",
+          });
+        }
+    
+        const token = header?.split(" ")[1];
+        const verifyContentWriter = await verifyJWTToken(token);
+    
+        if (!verifyContentWriter) {
+          return res.status(401).json({
+            success: false,
+            error: "You have no access to this page. invalid token",
+          });
+        }
+    
+        const findContentWriter = await CONTENT_WRITER.findById(verifyContentWriter?.data?._id);
+    
+        if (!findContentWriter) {
+          return res.status(401).json({
+            success: false,
+            error: "You have no access to this page. no admin in database",
+          });
+        }
+    
+        const { _id, name, email } = findContentWriter;
+    
+        req.contentWriter = {
+          _id,
+          name,
+          email,
+        };
+    
+        return next();
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: "Something went wrong",
+          error: error?.message,
+        });
+      }
+}

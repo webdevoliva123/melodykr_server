@@ -10,7 +10,16 @@ const {
 const {
   adminLoginAuthentication,
   adminRoleAuthentication,
-} = require("../../middleware/admin_middleware");
+} = require("../../middleware/authentication_middleware");
+
+// 1. create admins (Teach_Heads,Higher_Heads)
+// 2. login admins (Teach_Heads,Higher_Heads)
+// 3. genrate links for new account of moderator by (Teach_Heads,Higher_Heads)
+// 4. create final moderator accounts by moderator by genrated links
+// 5. create content writer accounts by new_moderator
+
+// ----------------------------------------------------------------
+
 
 // create admins
 router.post("/admins/new",createAdmins);

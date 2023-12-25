@@ -7,7 +7,7 @@ const {
   verifyJWTTokenOneTimeForAccount,
 } = require("../../utils/tokens");
 
-const createAdmins = async (req, res) => {
+exports.createAdmins = async (req, res) => {
   try {
     const findThisAdmin = await ADMINS.findOne({ email: req.body.email });
 
@@ -27,7 +27,7 @@ const createAdmins = async (req, res) => {
       role: "Technical_Heads",
     });
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Role Created",
       data: response,
@@ -46,7 +46,7 @@ const createAdmins = async (req, res) => {
   }
 };
 
-const loginAdmins = async (req, res) => {
+exports.loginAdmins = async (req, res) => {
   try {
     const findThisAdmin = await ADMINS.findOne({ email: req.body.email });
 
@@ -92,7 +92,7 @@ const loginAdmins = async (req, res) => {
   }
 };
 
-const genrateMelodyModrator = async (req, res) => {
+exports.genrateMelodyModrator = async (req, res) => {
   try {
     const findThisAdmin = await ADMINS.findOne({ email: req.body.email });
 
@@ -123,7 +123,7 @@ const genrateMelodyModrator = async (req, res) => {
   }
 };
 
-const createMelodyModrator = async (req, res) => {
+exports.createMelodyModrator = async (req, res) => {
   try {
     const { token, ...otherData } = req.body;
     const isTokenVerified = await verifyJWTTokenOneTimeForAccount(token);
@@ -154,7 +154,7 @@ const createMelodyModrator = async (req, res) => {
       password: await encryptPassword(otherData?.password),
     });
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Role Created",
       data: response,
@@ -176,7 +176,7 @@ const createMelodyModrator = async (req, res) => {
 
 
 
-const createContentWriterAccountByNewsModerator = async (req, res) => {
+exports.createContentWriterAccountByNewsModerator = async (req, res) => {
   try {
     const {
       name,
@@ -212,7 +212,7 @@ const createContentWriterAccountByNewsModerator = async (req, res) => {
       }
     }).then((data) => {
       const {password : resposnePassword,...otherData} = data?._doc;
-      return res.status(200).json({
+      return res.status(201).json({
         success: false,
         message: "Content Writer Created Successfully",
         data: {
@@ -236,12 +236,4 @@ const createContentWriterAccountByNewsModerator = async (req, res) => {
       error: error?.message,
     });
   }
-};
-
-module.exports = {
-  createAdmins,
-  loginAdmins,
-  genrateMelodyModrator,
-  createMelodyModrator,
-  createContentWriterAccountByNewsModerator
 };

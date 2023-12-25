@@ -26,9 +26,10 @@ const contentWritersSchema = new mongoose.Schema({
   },
   articles: [
     {
-      id: {
+      article_id: {
         type: mongoose.Schema.ObjectId,
         default: mongoose.Schema.ObjectId,
+        ref: 'Article',
       },
     },
   ],
