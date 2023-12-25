@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 
 
 // import routes
-const AdminsRoutes = require('./router/accounts_router/Admins_Routes')
+const AdminsRoutes = require('./routes/admin_routes/Admins_Routes')
 app.use('/api/v1/melody',AdminsRoutes)
 
 

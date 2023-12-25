@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const contentWritersSchema = new mongoose.chema({
+const contentWritersSchema = new mongoose.Schema({
   profileImage : {
     type : String,
     default : 'https://res.cloudinary.com/dkz1pnb2b/image/upload/v1703451537/cat_1_xfid2j.png'
@@ -22,6 +22,7 @@ const contentWritersSchema = new mongoose.chema({
     type: String,
     default: "",
     required: true,
+    maxlength  : 500
   },
   articles: [
     {
@@ -34,7 +35,7 @@ const contentWritersSchema = new mongoose.chema({
   socialMedia: {
     twitter: String,
     linkedin: String,
-    github: String,
+    instagram: String,
   },
   createdAt: {
     type: Date,

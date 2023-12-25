@@ -23,7 +23,6 @@ const adminsSchema = new mongoose.Schema({
       "MelodyDramas_Moderator",
       "MelodyShopping_Moderator",
       "MelodyFamily_Moderator",
-      "Super_Admins",
       "Technical_Heads",
       "Higher_Heads",
     ],

@@ -1,4 +1,5 @@
-const ADMINS = require("../../models/accounts/Admins");
+const ADMINS = require("../../models/admins_modal/Admins");
+const CONTENT_WRITER = require("../../models/content_writer_model/Content_Writers");
 const { encryptPassword, decryptPassword } = require("../../utils/bycrypt");
 const {
   genrateJWTToken,
@@ -37,7 +38,7 @@ const createAdmins = async (req, res) => {
       }),
     });
   } catch (error) {
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
       message: "Something went wrong",
       error: error?.message,
@@ -83,7 +84,7 @@ const loginAdmins = async (req, res) => {
       }),
     });
   } catch (error) {
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
       message: "Something went wrong",
       error: error?.message,
@@ -114,7 +115,7 @@ const genrateMelodyModrator = async (req, res) => {
       token: genratedToken,
     });
   } catch (error) {
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
       message: "Something went wrong",
       error: error?.message,
@@ -148,25 +149,23 @@ const createMelodyModrator = async (req, res) => {
     }
 
     const response = await ADMINS.create({
-        ...isTokenVerified?.data,
-        name: otherData?.name,
-        password : await encryptPassword(otherData?.password)
-      });
+      ...isTokenVerified?.data,
+      name: otherData?.name,
+      password: await encryptPassword(otherData?.password),
+    });
 
-      return res.status(200).json({
-        success: true,
-        message: "Role Created",
-        data: response,
-        token: await genrateJWTToken({
-          _id: response?._id,
-          email: response?.email,
-          role: response?.role,
-        }),
-      });
-
-
-  } catch (error) {
     return res.status(200).json({
+      success: true,
+      message: "Role Created",
+      data: response,
+      token: await genrateJWTToken({
+        _id: response?._id,
+        email: response?.email,
+        role: response?.role,
+      }),
+    });
+  } catch (error) {
+    return res.status(500).json({
       success: false,
       message: "Something went wrong",
       error: error?.message,
@@ -174,13 +173,75 @@ const createMelodyModrator = async (req, res) => {
   }
 };
 
-const createContentWriterAccountByNewsModerator = async (req,res) => {
-    
-}
+
+
+
+const createContentWriterAccountByNewsModerator = async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      password : userPlainPassword,
+      bio,
+      twitterUrl,
+      linkedinUrl,
+      instagramUrl,
+    } = req.body;
+    const findThisContentWriter = await CONTENT_WRITER.findOne({
+      email,
+    });
+
+    if (findThisContentWriter) {
+      return res.status(500).json({
+        success: false,
+        message: "Content Writer Not Created Reated",
+        error:
+          "Looks like the email address already in use. Please, try with a different email address",
+      });
+    }
+
+    await CONTENT_WRITER.create({
+      name,
+      email,
+      password : await encryptPassword(userPlainPassword),
+      bio,
+      socialMedia : {
+        twitter : twitterUrl,
+        linkedin : linkedinUrl,
+        instagram : instagramUrl
+      }
+    }).then((data) => {
+      const {password : resposnePassword,...otherData} = data?._doc;
+      return res.status(200).json({
+        success: false,
+        message: "Content Writer Created Successfully",
+        data: {
+          ...otherData,
+          password : userPlainPassword
+        } ,
+      })
+    }).catch((error) => {
+      return res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+        error: error?.message,
+      });
+    })
+
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: error?.message,
+    });
+  }
+};
 
 module.exports = {
   createAdmins,
   loginAdmins,
   genrateMelodyModrator,
   createMelodyModrator,
+  createContentWriterAccountByNewsModerator
 };
