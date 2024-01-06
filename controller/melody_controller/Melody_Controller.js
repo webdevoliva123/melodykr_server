@@ -2,13 +2,16 @@ const ARTICLE = require("../../models/article_model/Article");
 
 exports.getMelodyHomeData = async (req,res) => {
     try {
-        const fieldsToRetrieve = 'title thumbnail category createdAt';
-        const articleHeadline = await ARTICLE.find({isHeadline:true}).select(fieldsToRetrieve).sort({ createdAt: -1 }).limit(10)
+        const contentForArticleHeadline = 'title thumbnail category createdAt';
+        const articleHeadline = await ARTICLE.find({isHeadline:true}).select(contentForArticleHeadline).sort({ createdAt: -1 }).limit(10)
+        const contentForLatestArticle= 'title thumbnail category author views createdAt';
+        const latestArticle = await ARTICLE.find({isHeadline:false}).select(contentForLatestArticle).sort({ createdAt: -1 }).limit(6)
         return res.status(200).json({
             success : true,
             message: 'Home Data Loaded',
             data : {
-                articleHeadline
+                articleHeadline,
+                latestArticle,
             }
         })
     } catch (error) {
