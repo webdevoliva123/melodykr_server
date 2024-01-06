@@ -3,10 +3,17 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const mongo_config = require('./configs/mongoconfig')
+const cors = require('cors');
 
 // config
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:false}))
+const corsOption = {
+    origin : ['http://localhost:3000','http://192.168.0.113:3000','https://melodykr.vercel.app'],
+    optionsSuccessStatus : 200
+}
+
+app.use(cors(corsOption));
 
 
 // import routes -  admin routes
