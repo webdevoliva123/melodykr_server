@@ -1,0 +1,3 @@
+exports.getHeadLineArticle = async () => {
+    
+}

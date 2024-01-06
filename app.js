@@ -17,6 +17,11 @@ app.use('/api/v1/melody',AdminsRoutes)
 const ContentWriterRoutes = require('./routes/content_writer_routes/Content_Writer_Routes')
 app.use('/api/v1/melody',ContentWriterRoutes)
 
+// import routes -  melody routes
+const MelodyRoutes = require('./routes/melody_routes/Melody_Routes')
+app.use('/api/v1/melody',MelodyRoutes)
+
+
 
 
 

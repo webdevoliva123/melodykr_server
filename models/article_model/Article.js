@@ -54,6 +54,10 @@ const articleSchema = new mongoose.Schema({
   subcategory: {
     type: String,
   },
+  isHeadline : {
+    type : Boolean,
+    default : false,
+  },
   tags: {
     type: [String],
   },
