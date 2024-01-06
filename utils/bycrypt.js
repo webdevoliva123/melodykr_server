@@ -1,4 +1,4 @@
-const bycrypt = require('bcrypt')
+const bycrypt = require('bcryptjs')
 
 exports.encryptPassword = async (password) => {
     return await bycrypt.hash(password,Number(process.env.BYCRYPT_SALT_ROUND))
