@@ -6,7 +6,7 @@ const router = express.Router();
 
 // ----------------------------------------------------------------
 
-// login
+// melody home data
 router.get('/home', getMelodyHomeData)
 
 

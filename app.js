@@ -28,6 +28,12 @@ app.use('/api/v1/melody',ContentWriterRoutes)
 const MelodyRoutes = require('./routes/melody_routes/Melody_Routes')
 app.use('/api/v1/melody',MelodyRoutes)
 
+// import routes -  melody routes
+const ArticleRoutes = require('./routes/article_routes/Article_Routes')
+app.use('/api/v1/melody',ArticleRoutes)
+
+
+
 
 
 
