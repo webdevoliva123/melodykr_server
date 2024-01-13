@@ -1,4 +1,5 @@
 const ADMINS = require("../../models/admins_modal/Admins");
+const ARTICLE = require("../../models/article_model/Article");
 const CONTENT_WRITER = require("../../models/content_writer_model/Content_Writers");
 const { encryptPassword, decryptPassword } = require("../../utils/bycrypt");
 const {
@@ -6,6 +7,7 @@ const {
   genrateJWTTokenOneTimeForAccount,
   verifyJWTTokenOneTimeForAccount,
 } = require("../../utils/tokens");
+const moment = require('moment');
 
 exports.createAdmins = async (req, res) => {
   try {
@@ -173,15 +175,12 @@ exports.createMelodyModrator = async (req, res) => {
   }
 };
 
-
-
-
 exports.createContentWriterAccountByNewsModerator = async (req, res) => {
   try {
     const {
       name,
       email,
-      password : userPlainPassword,
+      password: userPlainPassword,
       bio,
       twitterUrl,
       linkedinUrl,
@@ -203,32 +202,32 @@ exports.createContentWriterAccountByNewsModerator = async (req, res) => {
     await CONTENT_WRITER.create({
       name,
       email,
-      password : await encryptPassword(userPlainPassword),
+      password: await encryptPassword(userPlainPassword),
       bio,
-      socialMedia : {
-        twitter : twitterUrl,
-        linkedin : linkedinUrl,
-        instagram : instagramUrl
-      }
-    }).then((data) => {
-      const {password : resposnePassword,...otherData} = data?._doc;
-      return res.status(201).json({
-        success: false,
-        message: "Content Writer Created Successfully",
-        data: {
-          ...otherData,
-          password : userPlainPassword
-        } ,
-      })
-    }).catch((error) => {
-      return res.status(500).json({
-        success: false,
-        message: "Something went wrong",
-        error: error?.message,
-      });
+      socialMedia: {
+        twitter: twitterUrl,
+        linkedin: linkedinUrl,
+        instagram: instagramUrl,
+      },
     })
-
-
+      .then((data) => {
+        const { password: resposnePassword, ...otherData } = data?._doc;
+        return res.status(201).json({
+          success: false,
+          message: "Content Writer Created Successfully",
+          data: {
+            ...otherData,
+            password: userPlainPassword,
+          },
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({
+          success: false,
+          message: "Something went wrong",
+          error: error?.message,
+        });
+      });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -237,3 +236,29 @@ exports.createContentWriterAccountByNewsModerator = async (req, res) => {
     });
   }
 };
+
+// exports.getUpdateSechma = async (req, res) => {
+//   try {
+//     ARTICLE.updateMany({}, { $set: { isVideoInclude: false } })
+//       .then((response) => {
+//         return res.status(200).json({
+//           success: true,
+//           message: "Schema updated",
+//           data: response,
+//         });
+//       })
+//       .catch((error) => {
+//         return res.status(400).json({
+//           success: false,
+//           message: "Error while updating",
+//           error: error.message,
+//         });
+//       });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: "Something went wrong ",
+//       error: error.message,
+//     });
+//   }
+// };

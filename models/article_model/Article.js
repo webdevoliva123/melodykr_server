@@ -58,11 +58,15 @@ const articleSchema = new mongoose.Schema({
     type : Boolean,
     default : false,
   },
+  isVideoInclude : {
+    type : Boolean,
+    default : false
+  },
   tags: {
     type: [String],
   },
 });
 
-const ARTICLE = mongoose.model("Article", articleSchema);
+const ARTICLE = new mongoose.model("Article", articleSchema);
 
 module.exports = ARTICLE;

@@ -131,7 +131,7 @@ exports.getContentWriterArticle = async (req, res) => {
 
 exports.createArticleByContentWriter = async (req, res) => {
   try {
-    const { thumbnail, title, content, category, subcategory, tags } = req.body;
+    const { thumbnail, title, content, category, subcategory, tags, isVideoInclude = false } = req.body;
     const uploader = req.contentWriter;
 
     // required validation
@@ -184,6 +184,7 @@ exports.createArticleByContentWriter = async (req, res) => {
       author: uploader,
       category,
       subcategory,
+      isVideoInclude,
       tags,
     })
       .then(async (data) => {

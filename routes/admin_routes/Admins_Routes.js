@@ -6,6 +6,7 @@ const {
   genrateMelodyModrator,
   createMelodyModrator,
   createContentWriterAccountByNewsModerator,
+  getUpdateSechma,
 } = require("../../controller/admins_controller/Admins_Controller");
 const {
   adminLoginAuthentication,
@@ -17,6 +18,7 @@ const {
 // 3. genrate links for new account of moderator by (Teach_Heads,Higher_Heads)
 // 4. create final moderator accounts by moderator by genrated links
 // 5. create content writer accounts by new_moderator
+// 6. update database schema
 
 // ----------------------------------------------------------------
 
@@ -35,6 +37,8 @@ router.post(
   adminLoginAuthentication,
   adminRoleAuthentication(["MelodyNews_Moderator","Technical_Heads","Higher_Heads"]),
   createContentWriterAccountByNewsModerator
-);
+  );
+  // router.put("/update/database/scehma",getUpdateSechma)
+
 
 module.exports = router;
