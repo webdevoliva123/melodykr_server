@@ -99,7 +99,7 @@ exports.getHomeTrendingArticles = async (req, res) => {
 exports.getHomeLatestArticles = async (req, res) => {
   try {
     const latestArticle = await ARTICLE.find()
-      .sort({ craetedAt: -1 })
+      .sort({ createdAt: -1 })
       .limit(12);
 
     return res.status(200).json({
@@ -119,7 +119,7 @@ exports.getHomeLatestArticles = async (req, res) => {
 exports.getHomeThisWeekSpotlight = async (req, res) => {
   try {
     const spotlight = (await req?.params?.spotlight_type) || 1;
-    const thirtyDaysAgo = moment().subtract(7, "days").toDate();
+    const thirtyDaysAgo = moment().subtract(360, "days").toDate();
 
     if (spotlight == 1) {
       const spotligthArticles = await ARTICLE.find({
@@ -182,7 +182,7 @@ exports.getHomeViedosArticle = async (req, res) => {
   }
 };
 
-exports.getHomePickOneArticle = async ( req,res) => {
+exports.getHomePickOneArticle = async (req, res) => {
   try {
     const pickedArtilce = await ARTICLE.find({
       isHeadline: true,
@@ -202,11 +202,9 @@ exports.getHomePickOneArticle = async ( req,res) => {
       error: error.message,
     });
   }
-}
+};
 
-
-
-exports.getHomeAllCategoryArticle = async (req,res) => {
+exports.getHomeAllCategoryArticle = async (req, res) => {
   try {
     const videosArticles = await ARTICLE.find({
       isVideoInclude: true,
@@ -215,34 +213,149 @@ exports.getHomeAllCategoryArticle = async (req,res) => {
       .limit(3);
 
     const styleArticles = await ARTICLE.find({
-        category : 'STYLE'
+      category: "STYLE",
     })
-    .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 })
       .limit(3);
 
-      const tv_filmArticles = await ARTICLE.find({
-        category : 'TV/FILM'
+    const tv_filmArticles = await ARTICLE.find({
+      category: "TV/FILM",
     })
-    .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 })
       .limit(3);
 
-      const featuresArticles = await ARTICLE.find({
-        category : 'FEATURES'
+    const featuresArticles = await ARTICLE.find({
+      category: "FEATURES",
     })
-    .sort({ createdAt: -1 })
+      .sort({ createdAt: -1 })
       .limit(3);
 
     return res.status(200).json({
-      success :true,
-      message : "Categories articles retrieved successfully!",
-      data : {
-        videos : videosArticles,
-        style : styleArticles,
-        tv_film : tv_filmArticles,
-        features : featuresArticles
-      }
-    })
+      success: true,
+      message: "Categories articles retrieved successfully!",
+      data: {
+        videos: videosArticles,
+        style: styleArticles,
+        tv_film: tv_filmArticles,
+        features: featuresArticles,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while fetching all category articles.",
+      error: error.message,
+    });
+  }
+};
 
+exports.getArticleByCategory = async (req, res) => {
+  try {
+    const category = req?.params?.cat_id;
+
+    // 1 - Videos
+    // 2 - Style
+    // 3 - Drama
+    // 4 - Music
+    // 5 -  Features
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Something went wrong while fetching all category articles.",
+        error: `Please, provide a valid category id.`,
+      });
+    }
+
+    switch (category) {
+      case "1":
+        const vdieoArticles = await ARTICLE.find({
+          isVideoInclude: true,
+        }).sort({
+          createdAt: -1,
+        });
+
+     
+        return res.status(200).json({
+          success: true,
+          message: "Categories articles retrieved successfully!",
+          data: vdieoArticles,
+        });
+
+      case "2":
+        const styleArticles = await ARTICLE.find({ category: "STYLE" })?.sort({
+          createdAt: -1,
+        });
+        return res.status(200).json({
+          success: true,
+          message: "Categories articles retrieved successfully!",
+          data: styleArticles,
+        });
+      case "3":
+        const dramaArticles = await ARTICLE.find({ category: "TV/FILM" })?.sort(
+          {
+            createdAt: -1,
+          }
+        );
+        return res.status(200).json({
+          success: true,
+          message: "Categories articles retrieved successfully!",
+          data: dramaArticles,
+        });
+      case "4":
+        const musicArticles = await ARTICLE.find({ category: "MUSIC" })?.sort({
+          createdAt: -1,
+        });
+        return res.status(200).json({
+          success: true,
+          message: "Categories articles retrieved successfully!",
+          data: musicArticles,
+        });
+      case "5":
+        const featuresArticles = await ARTICLE.find({
+          category: "FEATURES",
+        })?.sort({
+          createdAt: -1,
+        });
+        return res.status(200).json({
+          success: true,
+          message: "Categories articles retrieved successfully!",
+          data: featuresArticles,
+        });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while fetching all category articles.",
+      error: error.message,
+    });
+  }
+};
+
+
+exports.getArticleAuthor = async (req,res) => {
+  try {
+    const auhtor = req?.params?.author_id;
+
+
+    if (!auhtor) {
+      return res.status(404).json({
+        success: false,
+        message: "Something went wrong while fetching all category articles.",
+        error: `Please, provide a valid category id.`,
+      });
+    }
+
+    const articleAuthor = await CONTENT_WRITER.findById(auhtor);
+
+    // console.log(articleAuthor);
+
+ 
+    return res.status(200).json({
+      success: true,
+      message: "Categories articles retrieved successfully!",
+      data: articleAuthor,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
