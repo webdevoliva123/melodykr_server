@@ -7,7 +7,6 @@ const {
   genrateJWTTokenOneTimeForAccount,
   verifyJWTTokenOneTimeForAccount,
 } = require("../../utils/tokens");
-const moment = require('moment');
 
 exports.createAdmins = async (req, res) => {
   try {

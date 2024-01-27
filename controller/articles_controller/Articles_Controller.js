@@ -55,19 +55,26 @@ exports.getArticle = async (req, res) => {
       const findlatestArticle = await ARTICLE?.find()
         .select(latest_article)
         .sort({ createdAt: -1 })
-        .limit(10);
+        .limit(12);
       return res.status(404).json({
         sucess: false,
-        error:
+        message:
           "We couldn't find any articles by this id. Don't worry, Explore latest articles.",
         data: findlatestArticle,
       });
     }
   } catch (error) {
+    const latest_article = "_id thumbnail title category createdAt";
+    const findlatestArticle = await ARTICLE?.find()
+      .select(latest_article)
+      .sort({ createdAt: -1 })
+      .limit(12);
     return res.status(500).json({
       success: false,
-      message: "Something went wrong",
+      message:
+        "We couldn't find any articles by this id. Don't worry, Explore latest articles.",
       error: error?.message,
+      data: findlatestArticle,
     });
   }
 };
@@ -275,7 +282,6 @@ exports.getArticleByCategory = async (req, res) => {
           createdAt: -1,
         });
 
-     
         return res.status(200).json({
           success: true,
           message: "Categories articles retrieved successfully!",
@@ -332,11 +338,9 @@ exports.getArticleByCategory = async (req, res) => {
   }
 };
 
-
-exports.getArticleAuthor = async (req,res) => {
+exports.getArticleAuthor = async (req, res) => {
   try {
     const auhtor = req?.params?.author_id;
-
 
     if (!auhtor) {
       return res.status(404).json({
@@ -347,20 +351,39 @@ exports.getArticleAuthor = async (req,res) => {
     }
 
     const articleAuthor = await CONTENT_WRITER.findById(auhtor);
+    if (articleAuthor) {
+      const { password, ...authorDetails } = articleAuthor?._doc;
 
-    // console.log(articleAuthor);
-
- 
-    return res.status(200).json({
-      success: true,
-      message: "Categories articles retrieved successfully!",
-      data: articleAuthor,
-    });
+      return res.status(200).json({
+        success: true,
+        message: "Categories articles retrieved successfully!",
+        data: authorDetails,
+      });
+    } else {
+      const authors = "_id profileImage name email socialMedia articles";
+      const findAllAuthors = await CONTENT_WRITER?.find()
+        .select(authors)
+        .sort({ createdAt: -1 })
+        .limit(12);
+      return res.status(404).json({
+        sucess: false,
+        message:
+          "We couldn't find any account by this id. Don't worry, Explore other popular content writers.",
+        data: findAllAuthors,
+      });
+    }
   } catch (error) {
+    const authors = "_id profileImage name email socialMedia articles";
+    const findAllAuthors = await CONTENT_WRITER?.find()
+      .select(authors)
+      .sort({ createdAt: -1 })
+      .limit(12);
     return res.status(500).json({
       success: false,
-      message: "Something went wrong while fetching all category articles.",
       error: error.message,
+      message:
+      "We couldn't find any account by this id. Don't worry, Explore other popular content writers.",
+    data: findAllAuthors,
     });
   }
-}
+};
