@@ -10,6 +10,7 @@ exports.getArticle = async (req, res) => {
     const findArticle = await ARTICLE.findById(article_id);
 
     if (findArticle) {
+      await ARTICLE.findOneAndUpdate({_id : article_id }, {views : findArticle?.views + 1})
       const { author, ...otherData } = findArticle?._doc;
 
       // article author info
