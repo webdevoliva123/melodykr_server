@@ -1,6 +1,7 @@
 const ARTICLE = require("../../models/article_model/Article");
 const CONTENT_WRITER = require("../../models/content_writer_model/Content_Writers");
 const { decryptPassword } = require("../../utils/bycrypt");
+const { returnError } = require("../../utils/global");
 const {
   requiredContentRegex,
   articleTitleMaxLengthRegex,
@@ -53,11 +54,8 @@ exports.loginContentWriter = async (req, res) => {
       }),
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };
 
@@ -85,11 +83,8 @@ exports.getContentWriterInfo = async (req, res) => {
       data: otherData,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };
 
@@ -121,11 +116,8 @@ exports.getContentWriterArticle = async (req, res) => {
       data: await content_writer_articles,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };
 
@@ -206,11 +198,8 @@ exports.createArticleByContentWriter = async (req, res) => {
         });
       });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };
 
@@ -319,11 +308,8 @@ exports.updatedArticleByContentWriter = async (req, res) => {
         });
       });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };
 
@@ -385,10 +371,7 @@ exports.deleteArticleByContentWriter = async (req, res) => {
         });
       });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };

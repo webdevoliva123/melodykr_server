@@ -1,5 +1,6 @@
 const ADMINS = require("../models/admins_modal/Admins");
 const CONTENT_WRITER = require("../models/content_writer_model/Content_Writers");
+const { returnError } = require("../utils/global");
 const { verifyJWTToken } = require("../utils/tokens");
 
 exports.adminLoginAuthentication = async (req, res, next) => {
@@ -42,11 +43,8 @@ exports.adminLoginAuthentication = async (req, res, next) => {
 
     return next();
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
+    
   }
 };
 
@@ -112,10 +110,6 @@ exports.contentWriterLoginAuthentication = async (req,res,next) => {
     
         return next();
       } catch (error) {
-        return res.status(500).json({
-          success: false,
-          message: "Something went wrong",
-          error: error?.message,
-        });
+        return returnError(res,500,"Something went wrong",error?.message)
       }
 }

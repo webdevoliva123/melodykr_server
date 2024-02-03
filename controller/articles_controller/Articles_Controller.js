@@ -1,6 +1,7 @@
 const ARTICLE = require("../../models/article_model/Article");
 const CONTENT_WRITER = require("../../models/content_writer_model/Content_Writers");
 const moment = require("moment");
+const { returnError } = require("../../utils/global");
 
 exports.getArticle = async (req, res) => {
   try {
@@ -57,12 +58,8 @@ exports.getArticle = async (req, res) => {
         .select(latest_article)
         .sort({ createdAt: -1 })
         .limit(12);
-      return res.status(404).json({
-        sucess: false,
-        message:
-          "We couldn't find any articles by this id. Don't worry, Explore latest articles.",
-        data: findlatestArticle,
-      });
+        return returnError(res,404,"We couldn't find any articles by this id. Don't worry, Explore latest articles.",error?.message,findlatestArticle)
+      
     }
   } catch (error) {
     const latest_article = "_id thumbnail title category createdAt";
@@ -96,11 +93,9 @@ exports.getHomeTrendingArticles = async (req, res) => {
       data: trendingArticles,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching trending articles.",
-      error: error.message,
-    });
+   
+
+    return returnError(res,500,"Something went wrong while fetching trending articles.",error?.message)
   }
 };
 
@@ -116,11 +111,10 @@ exports.getHomeLatestArticles = async (req, res) => {
       data: latestArticle,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching latest articles.",
-      error: error.message,
-    });
+    
+    return returnError(res,500,"Something went wrong while fetching latest articles.",error?.message)
+
+   
   }
 };
 
@@ -160,11 +154,8 @@ exports.getHomeThisWeekSpotlight = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching spotligth articles.",
-      error: error.message,
-    });
+    return returnError(res,500,"Something went wrong while fetching spotligth articles.",error?.message)
+    
   }
 };
 
@@ -182,11 +173,8 @@ exports.getHomeViedosArticle = async (req, res) => {
       data: videosArticle,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching videos articles.",
-      error: error.message,
-    });
+    return returnError(res,500,"Something went wrong while fetching videos articles.",error?.message)
+    
   }
 };
 
@@ -204,11 +192,8 @@ exports.getHomePickOneArticle = async (req, res) => {
       data: pickedArtilce,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching picked one articles.",
-      error: error.message,
-    });
+    return returnError(res,500,"Something went wrong while fetching picked one articles.",error?.message)
+    
   }
 };
 
@@ -249,11 +234,8 @@ exports.getHomeAllCategoryArticle = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching all category articles.",
-      error: error.message,
-    });
+    return returnError(res,500,"Something went wrong while fetching all category articles.",error?.message)
+    
   }
 };
 
@@ -331,11 +313,8 @@ exports.getArticleByCategory = async (req, res) => {
         });
     }
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong while fetching all category articles.",
-      error: error.message,
-    });
+    return returnError(res,500,"Something went wrong while fetching all category articles.",error?.message)
+    
   }
 };
 
@@ -379,12 +358,7 @@ exports.getArticleAuthor = async (req, res) => {
       .select(authors)
       .sort({ createdAt: -1 })
       .limit(12);
-    return res.status(500).json({
-      success: false,
-      error: error.message,
-      message:
-      "We couldn't find any account by this id. Don't worry, Explore other popular content writers.",
-    data: findAllAuthors,
-    });
+      return returnError(res,404,"We couldn't find any account by this id. Don't worry, Explore other popular content writers.",error?.message,findAllAuthors)
+   
   }
 };

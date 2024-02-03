@@ -1,4 +1,5 @@
 const ARTICLE = require("../../models/article_model/Article");
+const { returnError } = require("../../utils/global");
 
 exports.getMelodyHomeData = async (req,res) => {
     try {
@@ -15,11 +16,8 @@ exports.getMelodyHomeData = async (req,res) => {
             }
         })
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: 'Something went wrong',
-            error: error?.message,
-          });
+        return returnError(res,500,"Something went wrong",error?.message)
+        
     }
 }
 

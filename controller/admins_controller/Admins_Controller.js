@@ -1,7 +1,7 @@
 const ADMINS = require("../../models/admins_modal/Admins");
-const ARTICLE = require("../../models/article_model/Article");
 const CONTENT_WRITER = require("../../models/content_writer_model/Content_Writers");
 const { encryptPassword, decryptPassword } = require("../../utils/bycrypt");
+const { returnError } = require("../../utils/global");
 const {
   genrateJWTToken,
   genrateJWTTokenOneTimeForAccount,
@@ -13,11 +13,8 @@ exports.createAdmins = async (req, res) => {
     const findThisAdmin = await ADMINS.findOne({ email: req.body.email });
 
     if (findThisAdmin) {
-      return res.status(400).json({
-        success: false,
-        message: "Role Not Created",
-        error: "This email is already in use.",
-      });
+      return returnError(res,400,"Role Not Created","This email is already in use.")
+      
     }
 
     const { password, ...otherRequest } = req.body;
@@ -39,11 +36,7 @@ exports.createAdmins = async (req, res) => {
       }),
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
   }
 };
 
@@ -85,11 +78,7 @@ exports.loginAdmins = async (req, res) => {
       }),
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
   }
 };
 
@@ -116,11 +105,7 @@ exports.genrateMelodyModrator = async (req, res) => {
       token: genratedToken,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
   }
 };
 
@@ -166,11 +151,7 @@ exports.createMelodyModrator = async (req, res) => {
       }),
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
   }
 };
 
@@ -228,11 +209,7 @@ exports.createContentWriterAccountByNewsModerator = async (req, res) => {
         });
       });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error?.message,
-    });
+    return returnError(res,500,"Something went wrong",error?.message)
   }
 };
 
