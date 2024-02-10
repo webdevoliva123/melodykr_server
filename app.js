@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const mongo_config = require('./configs/mongoconfig')
 const cors = require('cors');
 
+
 // config
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -31,6 +32,10 @@ app.use('/api/v1/melody',MelodyRoutes)
 // import routes -  melody routes
 const ArticleRoutes = require('./routes/article_routes/Article_Routes')
 app.use('/api/v1/melody',ArticleRoutes)
+
+// import routes -  users routes
+const UserRoutes = require('./routes/user_routes/User_routes')
+app.use('/api/v1/melody',UserRoutes)
 
 
 
